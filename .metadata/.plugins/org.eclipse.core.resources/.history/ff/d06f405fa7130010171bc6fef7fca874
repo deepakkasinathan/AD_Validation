@@ -1,0 +1,61 @@
+package com.est.ad.service;
+
+import java.io.FileWriter;
+import java.io.StringWriter;
+import java.util.Scanner;
+
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.springframework.stereotype.Service;
+
+import com.est.ad.entity.AdTemplate;
+
+@Service
+
+public class ADScriptGenerator {
+	private MetadataService metadataService;
+	public ADScriptGenerator( MetadataService metadataService) {
+		this.metadataService=metadataService;
+	}
+    public String Generate(AdTemplate adTemplate) {
+    	
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.init();
+
+
+        VelocityContext context = new VelocityContext();
+
+        context.put("adParams", adTemplate);
+
+        StringWriter writer = new StringWriter();
+        velocityEngine.evaluate(context, writer, "logTag", 
+            new Scanner(ADScriptGenerator.class.getResourceAsStream("/ad_script.vm"), "UTF-8").useDelimiter("\\A").next()
+        );
+
+        
+        try (FileWriter fileWriter = new FileWriter("D:\\Projects\\optim\\Optim_Dir\\ad_script.txt")) {
+            fileWriter.write(writer.toString());
+            System.out.println(metadataService. getTableMetadata(adTemplate.getTable_name()).toString());
+            
+            return "AD Script generated successfully! location: D:/Projects/optim/Optim_Dir/ad_script.txt";
+        } catch (Exception e) {
+        	 System.out.println("Error Happened");
+        }
+        return "Unexpected error";
+    }
+    public boolean isValidTemplate(VelocityContext context) {
+        try {
+        	VelocityEngine velocityEngine = new VelocityEngine();
+            velocityEngine.init();
+            Template template = velocityEngine.getTemplate("ad_script.vm");
+            StringWriter writer = new StringWriter();
+            template.merge(context, writer);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Syntax error in Velocity template: " + e.getMessage());
+            return false;
+        }
+    }
+
+}

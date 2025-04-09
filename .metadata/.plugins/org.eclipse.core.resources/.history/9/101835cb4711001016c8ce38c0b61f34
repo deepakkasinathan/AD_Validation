@@ -1,0 +1,20 @@
+package com.est.ad.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.est.ad.entity.AdTemplate;
+
+@RestController
+@RequestMapping("/api/ad-script")
+public class ADScriptController {
+
+
+    @PostMapping("/generate")
+    public ResponseEntity<?> generateADScript(@RequestBody AdTemplate adTemplate) {
+        
+    }
+}

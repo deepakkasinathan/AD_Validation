@@ -1,0 +1,9 @@
+package snippet;
+
+public class Snippet {
+	StringWriter writer = new StringWriter();
+	velocityEngine.evaluate(context, writer, "logTag", 
+	    new Scanner(ADScriptGenerator.class.getResourceAsStream("ad_script.vm"), "UTF-8").useDelimiter("\\A").next()
+	);
+}
+

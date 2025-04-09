@@ -1,0 +1,66 @@
+package com.est.ad.service;
+
+import java.io.FileWriter;
+import java.io.StringWriter;
+import java.util.Scanner;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.springframework.stereotype.Service;
+
+import com.est.ad.entity.AdTemplate;
+
+@Service
+public class ADScriptGenerator {
+	private MetadataService metadataService;
+	public ADScriptGenerator( MetadataService metadataService) {
+		this.metadataService=metadataService;
+	}
+    public String Generate(AdTemplate adTemplate) {
+    	
+    	
+    	
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.init();
+
+
+        VelocityContext context = new VelocityContext();
+        
+        context.put("archiveName", adTemplate.getArchiveName());
+        context.put("qualifier", adTemplate.getQualifier());
+        context.put("start_table", adTemplate.getStart_table());
+        context.put("add_tbl", adTemplate.getAdd_tbl());
+        context.put("mod_crit", adTemplate.getMod_crit());
+        context.put("adchgs", adTemplate.getAdchgs());
+        context.put("use_new", adTemplate.getUse_new());
+        context.put("use_fm", adTemplate.getUse_fm());
+        context.put("pns_state", adTemplate.getPns_state());
+        context.put("solution", adTemplate.getSolution());
+        context.put("table_name", adTemplate.getTable_name());
+        context.put("access", adTemplate.getAccess());
+        context.put("ref", adTemplate.getRef());
+        context.put("daa", adTemplate.getDaa());
+        context.put("ur", adTemplate.getUr());
+        context.put("predop", adTemplate.getPredop());
+        context.put("val_delim", adTemplate.getVal_delim());
+        context.put("col_flag", adTemplate.getCol_flag());
+        context.put("extra_rowid", adTemplate.getExtra_rowid());
+       
+
+        StringWriter writer = new StringWriter();
+        velocityEngine.evaluate(context, writer, "logTag", 
+            new Scanner(ADScriptGenerator.class.getResourceAsStream("/ad_script.vm"), "UTF-8").useDelimiter("\\A").next()
+        );
+
+        
+        try (FileWriter fileWriter = new FileWriter("D:\\Projects\\optim\\Optim_Dir\\ad_script.txt")) {
+            fileWriter.write(writer.toString());
+            
+            metadataService. getTableMetadata(adTemplate.getTable_name());
+            return "AD Script generated successfully! location: D:/Projects/optim/Optim_Dir/ad_script.txt";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Unexpected error";
+    }
+}

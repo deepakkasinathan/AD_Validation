@@ -1,0 +1,73 @@
+package com.est.ad.controller;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+
+@RestController
+@RequestMapping("/api/ad-script")
+public class ADScriptController {
+
+    private final VelocityEngine velocityEngine = new VelocityEngine();
+
+    public ADScriptController() {
+        velocityEngine.init();
+    }
+
+    @PostMapping("/generate")
+    public ResponseEntity<?> generateADScript(@RequestBody ADRequest request) {
+        try {
+            // Create Velocity Context
+            VelocityContext context = new VelocityContext();
+            context.put("archiveName", request.getArchiveName());
+            context.put("qualifier", request.getQualifier());
+            context.put("startTable", request.getStartTable());
+            context.put("addTbl", request.getAddTbl());
+            context.put("modCrit", request.getModCrit());
+            context.put("adChgs", request.getAdChgs());
+            context.put("useNew", request.getUseNew());
+            context.put("useFm", request.getUseFm());
+            context.put("pnsState", request.getPnsState());
+            context.put("solution", request.getSolution());
+            context.put("tables", request.getTables());
+
+            // Load the Velocity Template
+            String template = new String(Files.readAllBytes(Paths.get("src/main/resources/ad_script.vm")));
+            StringWriter writer = new StringWriter();
+            velocityEngine.evaluate(context, writer, "logTag", template);
+
+            // Define output directory
+            String outputDir = "D:/ad_scripts";
+            Files.createDirectories(Paths.get(outputDir));
+            String fileName = outputDir + "/" + request.getArchiveName() + "_AD_Script.txt";
+
+            // Write generated script to a file
+            try (FileWriter fileWriter = new FileWriter(fileName)) {
+                fileWriter.write(writer.toString());
+            }
+
+            // Return the generated script file
+            FileSystemResource fileResource = new FileSystemResource(fileName);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + request.getArchiveName() + "_AD_Script.txt");
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(fileResource);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error generating AD script: " + e.getMessage());
+        }
+    }
+}

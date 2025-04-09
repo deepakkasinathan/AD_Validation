@@ -1,0 +1,5 @@
+package com.est.ad.entity;
+
+public class AdTemplate {
+
+}

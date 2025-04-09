@@ -1,0 +1,63 @@
+package com.est.ad.service;
+
+import java.io.FileWriter;
+import java.io.StringWriter;
+import java.util.Scanner;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
+import com.est.ad.entity.AdTemplate;
+
+public class ADScriptGenerator {
+    public static void main(String[] args) {
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.init();
+
+
+        VelocityContext context = new VelocityContext();
+        AdTemplate adTemplate=new AdTemplate();
+        adTemplate.setArchiveName("DPK.SALES");
+        adTemplate.setQualifier("OPTIMDPK.SALES");
+        adTemplate.setAdd_tbl("a");
+        adTemplate.setMod_crit("a");
+        adTemplate.setAdchgs("sa");
+        adTemplate.setUse_new("use_new");
+        adTemplate.setUse_fm("Aas");
+        adTemplate.setPns_state("pns_state");
+        adTemplate.setSolution("as");
+        context.put("archiveName", "DPK.SALES");
+        context.put("qualifier", "OPTIMDPK.SALES");
+        context.put("start_table", "DPK.SALES");
+        context.put("add_tbl", "DPK.SALES");
+        context.put("mod_crit", "DPK.SALES");
+        context.put("adchgs", "DPK.SALES");
+        context.put("use_new", "DPK.SALES");
+        context.put("use_fm", "DPK.SALES");
+        context.put("pns_state", "DPK.SALES");
+        context.put("solution", "DPK.SALES");
+        context.put("table_name", "DPK.SALES");
+        context.put("access", "DPK.SALES");
+        context.put("ref", "DPK.SALES");
+        context.put("daa", "DPK.SALES");
+        context.put("ur", "DPK.SALES");
+        context.put("predop", "DPK.SALES");
+        context.put("val_delim", "DPK.SALES");
+        context.put("col_flag", "DPK.SALES");
+        context.put("extra_rowid", "DPK.SALES");
+       
+
+        StringWriter writer = new StringWriter();
+        velocityEngine.evaluate(context, writer, "logTag", 
+            new Scanner(ADScriptGenerator.class.getResourceAsStream("/ad_script.vm"), "UTF-8").useDelimiter("\\A").next()
+        );
+
+        
+        try (FileWriter fileWriter = new FileWriter("D:\\Projects\\optim\\Optim_Dir\\ad_script.txt")) {
+            fileWriter.write(writer.toString());
+            System.out.println("AD Script generated successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

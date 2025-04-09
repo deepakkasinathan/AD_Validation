@@ -1,0 +1,41 @@
+CREATE AD $archiveName
+DESC //'Generated Access Definition'//
+
+#foreach($table in $tables)
+TABLE ($table ACCESS SUID REF N DAA Y UR N PREDOP A VARDELIM : COLFLAG N EXTRROWID N)
+#end
+
+-- PRIMARY KEYS --
+#foreach($table in $tables)
+PRIMARY KEYS ($table -> #join($primaryKeys.get($table), ", "))
+#end
+
+-- FOREIGN KEYS --
+#foreach($table in $tables)
+FOREIGN KEYS ($table -> #join($foreignKeys.get($table), ", "))
+#end
+
+-- INDEXES --
+#foreach($table in $tables)
+INDEXES ($table -> #join($indexes.get($table), ", "))
+#end
+
+-- SEQUENCES --
+#foreach($sequence in $sequences)
+$sequence
+#end
+
+-- TRIGGERS --
+#foreach($trigger in $triggers)
+$trigger
+#end
+
+-- PROCEDURES --
+#foreach($procedure in $procedures)
+$procedure
+#end
+
+-- FUNCTIONS --
+#foreach($function in $functions)
+$function
+#end

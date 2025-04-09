@@ -1,0 +1,33 @@
+package com.est.ad.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.est.ad.entity.AdTemplate;
+import com.est.ad.entity.UserObjects;
+import com.est.ad.repo.UserObjectRepo;
+
+public class ImportService {
+
+	@Autowired
+private UserObjectRepo userObjectRepo;
+	
+	public ImportService(UserObjectRepo userObjectRepo){
+		this.userObjectRepo=userObjectRepo;
+	}
+
+public boolean ValidateAdMetaData(AdTemplate adTemplate) {
+	UserObjects userobject=userObjectRepo.findByObjectName(adTemplate.getTable_name(),"Type"); 
+	if(adTemplate.getLast_modified_date().equals(userobject.getTimestamp())) {
+		System.out.println("equals");
+		return true;
+	}
+	else if (adTemplate.getLast_modified_date().isBefore(userobject.getTimestamp())) {
+		System.out.println("equals");
+		return true;
+	}
+	else
+		return false;
+		
+	
+}
+}

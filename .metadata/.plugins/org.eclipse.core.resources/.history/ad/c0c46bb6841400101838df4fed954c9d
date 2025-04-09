@@ -1,0 +1,153 @@
+package com.est.ad.entity;
+
+import java.time.LocalDateTime;
+
+public class AdTemplate {
+	private String archiveName;
+	private String qualifier;
+	private String start_table;
+	private String add_tbl;
+	private String mod_crit;
+	private String adchgs;
+	private String use_new;
+	private String use_fm;
+	private String pns_state;
+	private String solution;
+	private String table_name;
+	private String access;
+	private String ref;
+	private String daa;
+	private String ur;
+	private String predop;
+	private String val_delim;
+	private String col_flag;
+	private String dbcip;
+	private String extra_rowid;
+	private String last_modified_date;
+	public String getArchiveName() {
+		return archiveName;
+	}
+	public void setArchiveName(String archiveName) {
+		this.archiveName = archiveName;
+	}
+	public String getQualifier() {
+		return qualifier;
+	}
+	public void setQualifier(String qualifier) {
+		this.qualifier = qualifier;
+	}
+	public String getStart_table() {
+		return start_table;
+	}
+	public void setStart_table(String start_table) {
+		this.start_table = start_table;
+	}
+	public String getAdd_tbl() {
+		return add_tbl;
+	}
+	public void setAdd_tbl(String add_tbl) {
+		this.add_tbl = add_tbl;
+	}
+	public String getMod_crit() {
+		return mod_crit;
+	}
+	public void setMod_crit(String mod_crit) {
+		this.mod_crit = mod_crit;
+	}
+	public String getAdchgs() {
+		return adchgs;
+	}
+	public void setAdchgs(String adchgs) {
+		this.adchgs = adchgs;
+	}
+	public String getUse_new() {
+		return use_new;
+	}
+	public void setUse_new(String use_new) {
+		this.use_new = use_new;
+	}
+	public String getUse_fm() {
+		return use_fm;
+	}
+	public void setUse_fm(String use_fm) {
+		this.use_fm = use_fm;
+	}
+	public String getPns_state() {
+		return pns_state;
+	}
+	public void setPns_state(String pns_state) {
+		this.pns_state = pns_state;
+	}
+	public String getSolution() {
+		return solution;
+	}
+	public void setSolution(String solution) {
+		this.solution = solution;
+	}
+	public String getTable_name() {
+		return table_name;
+	}
+	public void setTable_name(String table_name) {
+		this.table_name = table_name;
+	}
+	public String getAccess() {
+		return access;
+	}
+	public void setAccess(String access) {
+		this.access = access;
+	}
+	public String getRef() {
+		return ref;
+	}
+	public void setRef(String ref) {
+		this.ref = ref;
+	}
+	public String getDaa() {
+		return daa;
+	}
+	public void setDaa(String daa) {
+		this.daa = daa;
+	}
+	public String getUr() {
+		return ur;
+	}
+	public void setUr(String ur) {
+		this.ur = ur;
+	}
+	public String getPredop() {
+		return predop;
+	}
+	public void setPredop(String predop) {
+		this.predop = predop;
+	}
+	public String getVal_delim() {
+		return val_delim;
+	}
+	public void setVal_delim(String val_delim) {
+		this.val_delim = val_delim;
+	}
+	public String getCol_flag() {
+		return col_flag;
+	}
+	public void setCol_flag(String col_flag) {
+		this.col_flag = col_flag;
+	}
+	public String getExtra_rowid() {
+		return extra_rowid;
+	}
+	public void setExtra_rowid(String extra_rowid) {
+		this.extra_rowid = extra_rowid;
+	}
+	public String getDbcip() {
+		return dbcip;
+	}
+	public void setDbcip(String dbcip) {
+		this.dbcip = dbcip;
+	}
+	public LocalDateTime getLast_modified_date() {
+		return last_modified_date;
+	}
+	public void setLast_modified_date(LocalDateTime last_modified_date) {
+		this.last_modified_date = last_modified_date;
+	}
+}

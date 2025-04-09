@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;ad/src/main/resources/ad_scipt.vm&apos; to &apos;ad_script.vm&apos;" description="Rename resource &apos;ad_scipt.vm&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/ad_scipt.vm" name="ad_script.vm" stamp="1743764459975" updateReferences="true"/>
+</session>

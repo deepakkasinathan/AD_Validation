@@ -1,0 +1,4 @@
+CREATE AD $adParams.archiveName
+  DESC //'Generated Access Definition'//
+  SRCQUAL $adParams.qualifier START $adParams.start_table ADDTBLS $adParams.add_tbl MODCRIT $adParams.mod_crit ADCHGS $adParams.adchgs USENEW $adParams.use_new USEFM $adParams.use_fm PNSSTATE $adParams.pns_state SOLUTION $adParams.solution
+  TABLE ($adParams.table_name ACCESS $adParams.access REF $adParams.ref DAA $adParams.daa UR $adParams.ur DBCIP $adParams.dbcip PREDOP $adParams.predop VARDELIM $adParams.val_delim COLFLAG $adParams.col_flag EXTRROWID $adParams.extra_rowid)

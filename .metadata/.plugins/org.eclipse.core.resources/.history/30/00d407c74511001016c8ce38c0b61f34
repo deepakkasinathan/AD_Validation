@@ -1,0 +1,5 @@
+CREATE AD $archiveName
+DESC //'Generated Access Definition'//
+SRCQUAL $qualifier START $start_table ADDTBLS $add_tbl MODCRIT $mod_crit ADCHGS $adchgs USENEW $use_new USEFM $use_fm PNSSTATE $pns_state SOLUTION $solution
+TABLE ($table_name ACCESS $access REF $ref DAA $daa UR $ur PREDOP $predop VARDELIM $val_delim COLFLAG $col_flag EXTRROWID $extra_rowid)
+#end

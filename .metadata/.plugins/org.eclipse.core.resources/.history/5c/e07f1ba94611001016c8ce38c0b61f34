@@ -1,0 +1,23 @@
+package com.est.ad.entity;
+
+public class AdTemplate {
+	private String archiveName;
+	private String qualifier;
+	private String start_table;
+	private String add_tbl;
+	private String mod_crit;
+	private String adchgs;
+	private String use_new;
+	private String use_fm;
+	private String pns_state;
+	private String solution;
+	private String table_name;
+	private String access;
+	private String ref;
+	private String daa;
+	private String ur;
+	private String predop;
+	private String val_delim;
+	private String col_flag;
+	private String extra_rowid;
+}

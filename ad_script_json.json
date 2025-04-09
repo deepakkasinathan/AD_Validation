@@ -1,0 +1,23 @@
+{
+  "archiveName" : "DPK.SALESTBLT",
+  "qualifier" : "OPTIMDPK.OPTIMDPK",
+  "start_table" : "OPTIM_SALES",
+  "add_tbl" : "N",
+  "mod_crit" : "N",
+  "adchgs" : "N",
+  "use_new" : "Y",
+  "use_fm" : "N",
+  "pns_state" : "N",
+  "solution" : "0",
+  "table_name" : "OPTIM_SALES",
+  "access" : "SUID",
+  "ref" : "N",
+  "daa" : "N",
+  "ur" : "N",
+  "predop" : "A",
+  "val_delim" : "|",
+  "col_flag" : "N",
+  "dbcip" : "N",
+  "extra_rowid" : "N",
+  "last_modified_date" : "2025-04-25:09:40:17"
+}

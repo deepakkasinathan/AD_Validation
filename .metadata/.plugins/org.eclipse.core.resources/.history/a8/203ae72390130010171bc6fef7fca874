@@ -1,0 +1,51 @@
+package com.est.ad.service;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MetadataService {
+	 @Autowired
+	 private DataSource dataSource;
+	 public MetadataService(DataSource dataSource) {
+		 this.dataSource=dataSource;
+		 
+	 }
+	 private Connection conn;
+
+	    public List<Map<String, Object>> getTableMetadata(String tableName) throws SQLException {
+	        List<Map<String, Object>> metadataList = new ArrayList<>();
+
+	        try {
+	        	conn = dataSource.getConnection();
+	            DatabaseMetaData metaData = conn.getMetaData();
+	            ResultSet columns = metaData.getColumns(null, "OPTIMDPK", tableName, null);
+
+	            while (columns.next()) {
+	                Map<String, Object> columnInfo = new HashMap<>();
+	                columnInfo.put("columnName", columns.getString("COLUMN_NAME"));
+	                columnInfo.put("dataType", columns.getString("TYPE_NAME"));
+	                columnInfo.put("columnSize", columns.getInt("COLUMN_SIZE"));
+	                columnInfo.put("nullable", columns.getString("IS_NULLABLE"));
+	                columnInfo.put("autoIncrement", columns.getString("IS_AUTOINCREMENT"));
+
+	                metadataList.add(columnInfo);
+	            }
+	        }
+
+	        return metadataList;
+	    }
+	
+	
+}

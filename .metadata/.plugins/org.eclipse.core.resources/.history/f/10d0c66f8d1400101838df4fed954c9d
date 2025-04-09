@@ -1,0 +1,22 @@
+package com.est.ad.repo;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.est.ad.entity.UserObjects;
+
+public interface UserObjectRepo extends JpaRepository<UserObjects, String> {
+
+    @Query(value = """
+           SELECT OBJECT_NAME as objectName,
+                  OBJECT_TYPE as objectType,
+                  CREATED as timestamp
+           FROM USER_OBJECTS
+           WHERE OBJECT_NAME = :objectName
+           AND OBJECT_TYPE=:objectType
+           """, nativeQuery = true)
+    UserObjects findByObjectName(@Param("objectName") String objectName,@Param("objectType") String objectType);
+}

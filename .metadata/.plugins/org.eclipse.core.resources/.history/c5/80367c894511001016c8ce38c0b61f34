@@ -1,0 +1,62 @@
+package com.est.ad.service;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import java.io.FileWriter;
+import java.io.StringWriter;
+import java.util.*;
+
+public class ADScriptGenerator {
+    public static void main(String[] args) {
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.init();
+
+
+        VelocityContext context = new VelocityContext();
+        context.put("archiveName", "DPK.SALES");
+
+
+        List<String> tables = Arrays.asList("users", "orders", "products");
+        Map<String, List<String>> primaryKeys = new HashMap<>();
+        primaryKeys.put("users", Arrays.asList("id"));
+        primaryKeys.put("orders", Arrays.asList("order_id"));
+        primaryKeys.put("products", Arrays.asList("product_id"));
+
+        Map<String, List<String>> foreignKeys = new HashMap<>();
+        foreignKeys.put("orders", Arrays.asList("user_id -> users.id"));
+        foreignKeys.put("products", Arrays.asList("order_id -> orders.order_id"));
+
+        Map<String, List<String>> indexes = new HashMap<>();
+        indexes.put("users", Arrays.asList("email_idx"));
+        indexes.put("orders", Arrays.asList("date_idx"));
+
+        List<String> sequences = Arrays.asList("users_seq", "orders_seq");
+        List<String> triggers = Arrays.asList("order_trigger");
+        List<String> procedures = Arrays.asList("calculate_discount()");
+        List<String> functions = Arrays.asList("get_user_role()");
+
+        // Add Data to Context
+        context.put("tables", tables);
+        context.put("primaryKeys", primaryKeys);
+        context.put("foreignKeys", foreignKeys);
+        context.put("indexes", indexes);
+        context.put("sequences", sequences);
+        context.put("triggers", triggers);
+        context.put("procedures", procedures);
+        context.put("functions", functions);
+
+        // Process Template
+        StringWriter writer = new StringWriter();
+        velocityEngine.evaluate(context, writer, "logTag", 
+            new Scanner(ADScriptGenerator.class.getResourceAsStream("/ad_script.vm"), "UTF-8").useDelimiter("\\A").next()
+        );
+
+        // Write to File
+        try (FileWriter fileWriter = new FileWriter("D:/ad_scripts/MyArchive_AD_Script.txt")) {
+            fileWriter.write(writer.toString());
+            System.out.println("AD Script generated successfully!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

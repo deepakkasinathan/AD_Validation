@@ -1,0 +1,63 @@
+package com.est.ad.service;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.est.ad.entity.AdTemplate;
+import com.est.ad.entity.UserObjects;
+import com.est.ad.repo.UserObjectRepo;
+
+@Service
+public class ImportService {
+
+	@Autowired
+private UserObjectRepo userObjectRepo;
+	
+	public ImportService(UserObjectRepo userObjectRepo){
+		this.userObjectRepo=userObjectRepo;
+	}
+
+public boolean ValidateAdMetaData(AdTemplate adTemplate) {
+	System.out.println(adTemplate.getLast_modified_date());
+	UserObjects userobject=userObjectRepo.findByObjectName(adTemplate.getTable_name(),"TABLE"); 
+	System.out.println(userobject.getObject_name());
+	System.out.println(userobject.getTimestamp());
+	
+	if(compareDates(adTemplate.getLast_modified_date(),userobject.getTimestamp())) {
+		System.out.println("Metadata is not modified");
+		return true;
+	}
+	
+	else {
+		System.out.println("metadata changed after the ad generation");
+		return false;
+	}
+	
+}
+public String formattedTimestamp() {
+	 LocalDateTime now = LocalDateTime.now();
+     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss");
+
+     return now.format(formatter);
+}
+public boolean compareDates(String Ad_Date,String metadata_date) {
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm:ss");
+
+    LocalDateTime dateTime1 = LocalDateTime.parse(Ad_Date, formatter);
+    LocalDateTime dateTime2 = LocalDateTime.parse(metadata_date, formatter);
+
+    if (dateTime1.isBefore(dateTime2)) {
+       return false;
+    	
+    } else if (dateTime1.isAfter(dateTime2)) {
+        System.out.println("ts1 is after ts2");
+        return true;
+    } else {
+        System.out.println("Both timestamps are equal");
+        return true;
+    }
+}
+}

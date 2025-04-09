@@ -1,0 +1,21 @@
+package com.est.ad.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.est.ad.entity.AdTemplate;
+import com.est.ad.repo.UserObjectRepo;
+
+public class ImportService {
+
+	@Autowired
+private UserObjectRepo userObjectRepo;
+	
+	ImportService(UserObjectRepo userObjectRepo){
+		this.userObjectRepo=userObjectRepo;
+	}
+
+public boolean ValidateAdMetaData(AdTemplate adTemplate) {
+
+	
+}
+}
