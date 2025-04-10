@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.est.ad.entity.AdTemplate;
-import com.est.ad.service.ADScriptGenerator;
 import com.est.ad.service.ImportService;
+import com.est.ad.service.VelocityTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -24,12 +24,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class AdImportController {
 
 	@Autowired
-	private ADScriptGenerator adScriptGenerator;
+	private VelocityTemplate velocityTemplate;
 	private ImportService importService;
 
 	// ValidateAdMetaData
-	public AdImportController(ADScriptGenerator adScriptGenerator, ImportService importService) {
-		this.adScriptGenerator = adScriptGenerator;
+	public AdImportController(VelocityTemplate velocityTemplate, ImportService importService) {
+		this.velocityTemplate = velocityTemplate;
 		this.importService = importService;
 	}
 
@@ -59,12 +59,16 @@ public class AdImportController {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.registerModule(new JavaTimeModule());
 			AdTemplate adTemplate = mapper.readValue(jsonFile.getInputStream(), AdTemplate.class);
-			if (!adScriptGenerator.isValidTemplate()) {
+			if (!velocityTemplate.isValidTemplate()) {
 				return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
 						.body("File " + fileName + "is having Syntactical Error");
 			}
 			if (!importService.ValidateAdMetaData(adTemplate)) {
 				return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Metadata has been Changed");
+			}
+			//validateAgainstTemplate
+			if (!importService.validateAgainstTemplate(file,adTemplate)) {
+				return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Syntax Error");
 			}
 			return ResponseEntity.ok("File uploaded successfully: " + fileName);
 		} catch (IOException e) {

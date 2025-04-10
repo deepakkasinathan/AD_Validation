@@ -3,14 +3,8 @@ package com.est.ad.service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.StringWriter;
-import java.time.LocalDateTime;
-import java.util.Scanner;
 
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.est.ad.entity.AdTemplate;
@@ -19,35 +13,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 
 public class ADScriptGenerator {
+	@Autowired
 	private MetadataService metadataService;
 	private ImportService importService;
-	public ADScriptGenerator( MetadataService metadataService,ImportService importService) {
+	private VelocityTemplate velocityTemplate;
+	public ADScriptGenerator( MetadataService metadataService,ImportService importService,VelocityTemplate velocityTemplate) {
 		this.metadataService=metadataService;
 		this.importService=importService;
+		this.velocityTemplate=velocityTemplate;
 	}
 
     public String Generate(AdTemplate adTemplate) {
     	
-    	VelocityEngine velocityEngine = new VelocityEngine();
-    	velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "file");
-    	velocityEngine.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, "src/main/resources/templates");
-    	velocityEngine.init();
-
-        VelocityContext  context = new VelocityContext();
-
-        context.put("adParams", adTemplate);
-
-        StringWriter writer = new StringWriter();
-        /*
-        velocityEngine.evaluate(context, writer, "logTag", 
-            new Scanner(ADScriptGenerator.class.getResourceAsStream("templates/ad_script.vm"), "UTF-8").useDelimiter("\\A").next()
-        );
-        */
-        Template template = velocityEngine.getTemplate("ad_script.vm");
-        template.merge(context, writer);
-
-
-        adTemplate.setLast_modified_date(importService.formattedTimestamp());
+    	//To Default the generated date
+    	adTemplate.setLast_modified_date(importService.formattedTimestamp());
+    	
+    	StringWriter writer=velocityTemplate.renderTemplate(adTemplate);
         
         try (FileWriter fileWriter = new FileWriter("D:\\Projects\\optim\\Optim_Dir\\ad_script.txt")) {
             fileWriter.write(writer.toString());
@@ -66,25 +47,6 @@ public class ADScriptGenerator {
         }
         return "Unexpected error";
     }
-    public boolean isValidTemplate() {
-        try {
-
-            VelocityEngine velocityEngine = new VelocityEngine();
-            
-            velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "class");
-            velocityEngine.setProperty("class.resource.loader.class", 
-                ClasspathResourceLoader.class.getName());
-            velocityEngine.init();
-            Template template = velocityEngine.getTemplate("templates/ad_script.vm");
-            System.out.println("1");
-            template.merge(new org.apache.velocity.VelocityContext(), new StringWriter());
-            System.out.println("2");
-            return true;
-        }
-        catch (Exception e) {
-            System.err.println("Syntax error in Velocity template: " + e.getMessage());
-            return false;
-        }
-    }
+   
 
 }
